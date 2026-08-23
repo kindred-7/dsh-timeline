@@ -1,0 +1,164 @@
+# DSH Conversation Timeline Plugin
+
+A DeepSeek Harness (DSH) client plugin that renders a vertical timeline on the left side of the conversation window — one tick per user question — giving long conversations a "global map" for quick navigation.
+
+## Features
+
+- 📍 **Timeline markers** — every user question gets a short tick on the left of the conversation area
+- ✨ **Hover effect** — ticks smoothly extend and highlight in blue with a soft glow; neighboring ticks ripple outward
+- 💬 **Tooltip preview** — hovering shows a frosted-glass tooltip with the full question text
+- 🎯 **Click to navigate** — click any tick to smooth-scroll to that message
+- 📌 **Adaptive positioning** — follows sidebar resize / window zoom / layout collapse in real time, with a three-level container-detection fallback (no reliance on hashed class names)
+- 🌗 **Light & dark themes** — adapts automatically via `prefers-color-scheme`
+- ♿ **Accessible** — honors `prefers-reduced-motion`; ticks carry `aria-label`
+
+## Requirements
+
+- Node.js ≥ 18 and pnpm (Method A) — or nothing at all (Method B)
+- DSH ≥ 0.1.1-rc.2 · React 18+ · Web platform only
+
+## Installation
+
+### Method A: install straight from GitHub (recommended)
+
+On the target machine:
+
+```powershell
+# 1. Enter the dsh web profile directory
+cd %USERPROFILE%\.dsh\profiles\web
+
+# 2. Install from GitHub (pick one)
+pnpm add github:kindred-7/dsh-timeline                  # latest main branch
+pnpm add github:kindred-7/dsh-timeline#v0.3.0           # pin a tag
+pnpm add https://github.com/kindred-7/dsh-timeline/releases/download/v0.3.0/dsh-timeline-0.3.0.tgz   # release tarball
+
+# npm works equally well:
+npm install github:kindred-7/dsh-timeline
+
+# 3. Register into dsh.profile.bundles
+pnpm exec dsh-timeline-register
+
+# 4. Restart DSH web
+dsh web
+```
+
+Uninstall:
+
+```powershell
+pnpm exec dsh-timeline-register --remove   # remove the bundle entry
+pnpm remove dsh-timeline                   # remove the dependency
+```
+
+### Method B: one-click script (no Node/pnpm needed)
+
+1. Download and unzip `dsh-timeline-<version>.zip` anywhere
+2. Run the installer from the plugin folder:
+
+```powershell
+cd dsh-timeline
+.\install.ps1
+# if execution policy blocks it:
+# powershell -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+The script copies the plugin into `%USERPROFILE%\.dsh\profiles\web\node_modules\`, writes the dependency entry, and registers the bundle. It is idempotent — safe to re-run for updates.
+
+Uninstall: `.\uninstall.ps1`
+
+### Method C: manual
+
+1. Copy the plugin folder:
+
+```bash
+xcopy /E /I "<plugin-folder>" "%USERPROFILE%\.dsh\profiles\web\node_modules\dsh-timeline"
+```
+
+2. Open `%USERPROFILE%\.dsh\profiles\web\package.json` and wire it up:
+
+```json
+{
+  "dependencies": {
+    "dsh-timeline": "file:./node_modules/dsh-timeline"
+  },
+  "dsh": {
+    "profile": {
+      "bundles": [
+        "@deepseek-ai/dsh-base",
+        "@deepseek-ai/dsh-web-app",
+        "dsh-timeline"
+      ]
+    }
+  }
+}
+```
+
+3. Restart DSH web (`dsh web`)
+
+### Local development
+
+After changing code, refresh the snapshot inside the profile, then reload the page (Ctrl+F5):
+
+```powershell
+cd %USERPROFILE%\.dsh\profiles\web
+pnpm add D:\path\to\dsh-timeline
+pnpm exec dsh-timeline-register      # only needed the first time
+```
+
+## Usage
+
+Once installed, the timeline renders automatically:
+
+- **View** — each user question shows a gray tick on the left (6px spacing, vertically centered)
+- **Preview** — hover extends a tick (12px → 24px), tints it blue with glow, and shows a tooltip of the question
+- **Navigate** — click a tick to smooth-scroll to that message; keyboard navigation supported via Tab
+
+## Plugin structure
+
+```
+dsh-timeline/
+├── package.json          # manifest, peer deps, dsh bundle/client hints
+├── cordis.patch.yml      # bundle patch descriptor consumed by DSH
+├── register.js           # register/unregister CLI (bin: dsh-timeline-register)
+├── install.ps1           # Windows one-click installer
+├── uninstall.ps1         # uninstaller
+├── lib/
+│   ├── index.js          # plugin entry
+│   └── client.js         # client implementation (core)
+├── USAGE.md              # detailed usage guide (Chinese)
+├── README.md             # this file
+└── README.zh.md          # Chinese readme
+```
+
+## How it works
+
+- `lib/index.js` exposes the bundle patch (`cordis.patch.yml`) so the DSH client runtime injects the plugin UI into layout/conversation bundles
+- `lib/client.js` listens to the session via `useSession()`, extracts `user/message` events, renders ticks positioned against the conversation container, and handles hover ripple, tooltip, and click-scroll behavior
+
+## Styling
+
+Override the CSS classes to customize:
+
+```css
+.timeline-marker { background-color: #10b981; }
+.timeline-marker:hover { background-color: #059669; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6); }
+.timeline-container { left: 80px; }
+```
+
+## Compatibility
+
+- DSH 0.1.1-rc.2+, React 18+, Web platform only
+- Windows 10/11 · Chrome / Edge / Firefox
+
+## Known limitations
+
+- Ticks are positioned relative to the conversation container; exotic layouts may need a `left` tweak
+- Tooltip placement is mouse-based and can clip at screen edges
+- Only user messages are shown (assistant/system messages have no ticks)
+
+## License
+
+MIT
+
+## Contributing
+
+Issues and PRs welcome at <https://github.com/kindred-7/dsh-timeline>

@@ -1,0 +1,10 @@
+# dsh-timeline bundle patch.
+#
+# Mounts this package as a host Loader entry so the client-modules node half
+# scans its `dsh.client` declaration into the browser boot roster; without a
+# mounted entry the web half never reaches window.__DSH_BOOT__. All behavior
+# lives in the browser half (lib/client.js), so the host entry's own plugin
+# body is a no-op.
+- insert:
+    - id: ui-conversation-timeline
+      name: dsh-timeline
