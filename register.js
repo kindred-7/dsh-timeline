@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 // ============================================================================
-// dsh-conversation-timeline 注册脚本（零依赖）
+// dsh-timeline 注册脚本（零依赖）
 //
 // 在 dsh web profile 目录下执行（脚本只改「当前目录」的 package.json）：
 //
 //   cd %USERPROFILE%\.dsh\profiles\web
 //   pnpm add <本包 .tgz 的路径>                        # 安装 + 写 dependencies
-//   pnpm exec dsh-conversation-timeline-register       # 写入 dsh.profile.bundles
-//   pnpm exec dsh-conversation-timeline-register --remove   # 反注册 bundles
+//   pnpm exec dsh-timeline-register       # 写入 dsh.profile.bundles
+//   pnpm exec dsh-timeline-register --remove   # 反注册 bundles
 //
 // 参数：
 //   --profile-dir <路径>   显式指定 profile 目录（优先于当前目录）
@@ -21,7 +21,7 @@ import fs from "node:fs";
 import path from "node:path";
 import os from "node:os";
 
-const pluginName = "dsh-conversation-timeline";
+const pluginName = "dsh-timeline";
 
 // --- 解析命令行参数 -----------------------------------------------------------
 const argv = process.argv.slice(2);

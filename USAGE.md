@@ -7,7 +7,7 @@
 ## 📍 插件位置
 
 ```
-C:\Users\kindr\.dsh\profiles\web\node_modules\dsh-conversation-timeline\
+C:\Users\kindr\.dsh\profiles\web\node_modules\dsh-timeline\
 ```
 
 ## 🚀 启动插件
@@ -77,7 +77,7 @@ Hover 时会显示问题的 tooltip：
 如果时间线与侧边栏重叠，编辑：
 
 ```
-C:\Users\kindr\.dsh\profiles\web\node_modules\dsh-conversation-timeline\lib\client.js
+C:\Users\kindr\.dsh\profiles\web\node_modules\dsh-timeline\lib\client.js
 ```
 
 找到：
@@ -137,7 +137,7 @@ C:\Users\kindr\.dsh\profiles\web\node_modules\dsh-conversation-timeline\lib\clie
 1. 检查插件是否正确加载：
    - 打开浏览器开发者工具（F12）
    - 查看 Console 标签
-   - 应该看到 "[dsh-conversation-timeline] Plugin loaded"
+   - 应该看到 "[dsh-timeline] Plugin loaded"
 
 2. 检查 package.json：
    ```powershell
@@ -151,7 +151,7 @@ C:\Users\kindr\.dsh\profiles\web\node_modules\dsh-conversation-timeline\lib\clie
        "bundles": [
          "@deepseek-ai/dsh-base",
          "@deepseek-ai/dsh-web-app",
-         "dsh-conversation-timeline"
+         "dsh-timeline"
        ]
      }
    }
@@ -210,7 +210,7 @@ setTooltip({
 1. 更新源目录的文件：
    ```bash
    # 在源目录修改代码
-   cd C:\Users\kindr\dsh-conversation-timeline
+   cd C:\Users\kindr\dsh-timeline
    ```
 
 2. 重新运行安装脚本：
@@ -228,12 +228,12 @@ setTooltip({
    ```
 
 2. 删除以下内容：
-   - `dependencies` 中的 `"dsh-conversation-timeline"`
-   - `bundles` 数组中的 `"dsh-conversation-timeline"`
+   - `dependencies` 中的 `"dsh-timeline"`
+   - `bundles` 数组中的 `"dsh-timeline"`
 
 3. 删除插件目录：
    ```powershell
-   Remove-Item -Recurse -Force "$env:USERPROFILE\.dsh\profiles\web\node_modules\dsh-conversation-timeline"
+   Remove-Item -Recurse -Force "$env:USERPROFILE\.dsh\profiles\web\node_modules\dsh-timeline"
    ```
 
 4. 重启 DSH

@@ -19,7 +19,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 # --- 常量 ---
-$pluginName = "dsh-conversation-timeline"
+$pluginName = "dsh-timeline"
 $targetDir  = Join-Path $ProfileDir "node_modules\$pluginName"
 $pkgPath    = Join-Path $ProfileDir "package.json"
 

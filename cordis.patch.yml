@@ -1,4 +1,4 @@
-# dsh-conversation-timeline bundle patch.
+# dsh-timeline bundle patch.
 #
 # Mounts this package as a host Loader entry so the client-modules node half
 # scans its `dsh.client` declaration into the browser boot roster; without a
@@ -7,4 +7,4 @@
 # body is a no-op.
 - insert:
     - id: ui-conversation-timeline
-      name: dsh-conversation-timeline
+      name: dsh-timeline

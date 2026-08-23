@@ -1,11 +1,11 @@
 {
-  "name": "dsh-conversation-timeline",
+  "name": "dsh-timeline",
   "description": "Conversation timeline plugin: shows short lines on the left side of the conversation, with hover animation, tooltip showing the question, and click-to-scroll navigation",
   "version": "0.3.0",
   "type": "module",
   "main": "lib/index.js",
   "bin": {
-    "dsh-conversation-timeline-register": "./register.js"
+    "dsh-timeline-register": "./register.js"
   },
   "files": [
     "lib",

@@ -1,13 +1,21 @@
-# DSH 对话时间线插件
+# DSH Timeline（dsh-timeline）
 
-一个 DeepSeek Harness 客户端插件，在对话窗口左侧显示多轮对话的时间线标记。
+dsh web 对话时间线插件：在对话界面左侧渲染一条极简的垂直刻度线，每一轮用户提问对应一个刻度，为长对话提供"全局地图"式的快速导航。
 
-## 功能特性
+## 功能描述
 
-- 📍 **时间线标记**：在对话窗口左侧显示短线标记，每个用户提问对应一个标记
-- ✨ **Hover 动效**：鼠标悬停时短线平滑变长，带有蓝色高亮和发光效果
-- 💬 **Tooltip 预览**：悬停时显示提问的问题内容
-- 🎯 **点击定位**：点击标记后平滑滚动到对应的对话位置
+**一句话简介**（可直接用作 GitHub About / 仓库描述）：
+
+> dsh-timeline —— dsh web 对话导航时间线：左侧刻度标记每轮提问，悬停预览、点击定位、滚动跟随。
+
+**详细功能：**
+
+- 🧭 **对话快速导航**：每条用户提问在对话区左侧对应一条短刻度线；点击任意刻度，平滑滚动定位到对应消息；滚动浏览时自动高亮当前阅读位置所在的刻度
+- 💬 **悬停预览**：鼠标悬停时刻度拉长并弹出毛玻璃 tooltip，显示该轮提问的完整内容
+- ✨ **波纹动效**：悬停某刻度时，上下相邻刻度呈阶梯式长度衰减（波纹扩散），过渡动画细腻克制
+- 📌 **自适应定位**：以对话容器为基准动态计算位置——侧边栏拉伸、窗口缩放、布局折叠时实时跟随，永不被遮挡；容器探测采用三级降级策略（消息行结构探测 → 语义标记 → 类名匹配），不依赖构建产物 hash 类名，跨版本、跨机器稳定可用
+- 🌗 **明暗主题**：通过 CSS 变量适配 `prefers-color-scheme`，深浅色模式均自动切换
+- ♿ **无障碍**：遵循 `prefers-reduced-motion` 关闭动效；刻度带 `aria-label` 支持读屏
 
 ## 快速开始
 
@@ -20,10 +28,10 @@
 cd %USERPROFILE%\.dsh\profiles\web
 
 # 2. 用 pnpm 安装插件包（tgz 文件路径按实际位置调整）
-pnpm add D:\downloads\dsh-conversation-timeline-0.3.0.tgz
+pnpm add D:\downloads\dsh-timeline-0.3.0.tgz
 
 # 3. 注册到 dsh.profile.bundles
-pnpm exec dsh-conversation-timeline-register
+pnpm exec dsh-timeline-register
 
 # 4. 重启
 dsh web
@@ -32,17 +40,17 @@ dsh web
 卸载：
 
 ```powershell
-pnpm exec dsh-conversation-timeline-register --remove
-pnpm remove dsh-conversation-timeline
+pnpm exec dsh-timeline-register --remove
+pnpm remove dsh-timeline
 ```
 
 ### 方式二：一键脚本安装（无需 Node/pnpm）
 
-1. 将 `dsh-conversation-timeline-<版本>.zip` 解压到任意目录
+1. 将 `dsh-timeline-<版本>.zip` 解压到任意目录
 2. 在 PowerShell 中进入插件目录并运行安装脚本：
 
 ```powershell
-cd dsh-conversation-timeline
+cd dsh-timeline
 .\install.ps1
 ```
 
@@ -63,7 +71,7 @@ cd dsh-conversation-timeline
 
 ```bash
 # Windows（把 <插件目录> 替换为解压后的实际路径）
-xcopy /E /I "<插件目录>" "%USERPROFILE%\.dsh\profiles\web\node_modules\dsh-conversation-timeline"
+xcopy /E /I "<插件目录>" "%USERPROFILE%\.dsh\profiles\web\node_modules\dsh-timeline"
 ```
 
 2. **编辑 web profile 配置**
@@ -73,14 +81,14 @@ xcopy /E /I "<插件目录>" "%USERPROFILE%\.dsh\profiles\web\node_modules\dsh-c
 ```json
 {
   "dependencies": {
-    "dsh-conversation-timeline": "file:./node_modules/dsh-conversation-timeline"
+    "dsh-timeline": "file:./node_modules/dsh-timeline"
   },
   "dsh": {
     "profile": {
       "bundles": [
         "@deepseek-ai/dsh-base",
         "@deepseek-ai/dsh-web-app",
-        "dsh-conversation-timeline"
+        "dsh-timeline"
       ]
     }
   }
@@ -179,7 +187,7 @@ const userMessages = snapshot.events
 ### 文件结构
 
 ```
-dsh-conversation-timeline/
+dsh-timeline/
 ├── package.json          # 插件配置和依赖
 ├── README.md             # 英文说明
 ├── README.zh.md          # 中文说明
@@ -221,12 +229,12 @@ dsh-conversation-timeline/
 
 1. 检查插件是否正确安装：
 ```powershell
-Test-Path "$env:USERPROFILE\.dsh\profiles\web\node_modules\dsh-conversation-timeline"
+Test-Path "$env:USERPROFILE\.dsh\profiles\web\node_modules\dsh-timeline"
 ```
 
 2. 检查 package.json 是否包含插件：
 ```powershell
-Get-Content "$env:USERPROFILE\.dsh\profiles\web\package.json" | Select-String "dsh-conversation-timeline"
+Get-Content "$env:USERPROFILE\.dsh\profiles\web\package.json" | Select-String "dsh-timeline"
 ```
 
 3. 重启 DSH web 应用
@@ -256,7 +264,7 @@ const tooltipX = Math.min(rect.right + 10, window.innerWidth - 320);
 
 1. 进入插件源码目录：
 ```bash
-cd dsh-conversation-timeline
+cd dsh-timeline
 ```
 
 2. 修改代码后，重新安装到 profile：

@@ -17,10 +17,10 @@
 
 ```bash
 # Windows（把 <插件目录> 替换为解压后的实际路径）
-xcopy /E /I "<插件目录>" "%USERPROFILE%\.dsh\profiles\web\node_modules\dsh-conversation-timeline"
+xcopy /E /I "<插件目录>" "%USERPROFILE%\.dsh\profiles\web\node_modules\dsh-timeline"
 
 # Linux/Mac
-cp -r dsh-conversation-timeline ~/.dsh/profiles/web/node_modules/
+cp -r dsh-timeline ~/.dsh/profiles/web/node_modules/
 ```
 
 2. 编辑 web profile 的 `package.json`，添加插件依赖：
@@ -30,14 +30,14 @@ cp -r dsh-conversation-timeline ~/.dsh/profiles/web/node_modules/
   "name": "dsh-profile-web",
   "private": true,
   "dependencies": {
-    "dsh-conversation-timeline": "file:./node_modules/dsh-conversation-timeline"
+    "dsh-timeline": "file:./node_modules/dsh-timeline"
   },
   "dsh": {
     "profile": {
       "bundles": [
         "@deepseek-ai/dsh-base",
         "@deepseek-ai/dsh-web-app",
-        "dsh-conversation-timeline"
+        "dsh-timeline"
       ]
     }
   }
@@ -51,7 +51,7 @@ cp -r dsh-conversation-timeline ~/.dsh/profiles/web/node_modules/
 1. 在插件目录运行：
 
 ```bash
-cd dsh-conversation-timeline
+cd dsh-timeline
 pnpm link --global
 ```
 
@@ -59,7 +59,7 @@ pnpm link --global
 
 ```bash
 cd ~/.dsh/profiles/web
-pnpm link dsh-conversation-timeline
+pnpm link dsh-timeline
 ```
 
 3. 重启 DSH web 应用
@@ -77,7 +77,7 @@ pnpm link dsh-conversation-timeline
 ### 插件结构
 
 ```
-dsh-conversation-timeline/
+dsh-timeline/
 ├── package.json          # 插件配置和依赖
 ├── lib/
 │   ├── index.js         # 插件入口
