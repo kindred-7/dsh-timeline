@@ -27,7 +27,11 @@ dsh web 对话时间线插件：在对话界面左侧渲染一条极简的垂直
 # 1. 进入 dsh web profile 目录
 cd %USERPROFILE%\.dsh\profiles\web
 
-# 2. 用 pnpm 安装插件包（tgz 文件路径按实际位置调整）
+# 2. 从 GitHub 直接安装（任选其一）
+pnpm add github:kindred-7/dsh-timeline
+# 或安装指定版本的 tgz：
+pnpm add https://github.com/kindred-7/dsh-timeline/releases/download/v0.3.0/dsh-timeline-0.3.0.tgz
+# 或本地 tgz 文件：
 pnpm add D:\downloads\dsh-timeline-0.3.0.tgz
 
 # 3. 注册到 dsh.profile.bundles
