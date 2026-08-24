@@ -6,7 +6,7 @@ dsh web 对话时间线插件：在对话界面左侧渲染一条极简的垂直
 
 **一句话简介**（可直接用作 GitHub About / 仓库描述）：
 
-> dsh-timeline —— dsh web 对话导航时间线：左侧刻度标记每轮提问，悬停预览、点击定位、滚动跟随。
+> @kindred7/dsh-timeline —— dsh web 对话导航时间线：左侧刻度标记每轮提问，悬停预览、点击定位、滚动跟随。
 
 **详细功能：**
 
@@ -24,7 +24,10 @@ dsh web 对话时间线插件：在对话界面左侧渲染一条极简的垂直
 `dsh plugin --profile web <参数>` 会进入 web profile 目录（`%USERPROFILE%\.dsh\profiles\web`，首次使用自动创建）并把参数转发给 pnpm；安装/更新/卸载成功后自动对账 `dsh.profile.bundles`——凡是声明了 `dsh.bundle` 的依赖都会被自动注册，无需手动执行注册命令。
 
 ```powershell
-# 从 GitHub 安装到 web profile
+# 从 npm 注册表安装——国内无需代理即可访问（npmmirror 自动同步）
+dsh plugin --profile web add @kindred7/dsh-timeline
+
+# 或从 GitHub 直装
 dsh plugin --profile web add github:kindred-7/dsh-timeline
 
 # 重启 DSH web 生效
@@ -34,9 +37,9 @@ dsh web
 锁定版本与日常管理使用同一条命令：
 
 ```powershell
-dsh plugin --profile web add github:kindred-7/dsh-timeline#v0.4.0   # 锁定 v0.4.0 tag
-dsh plugin --profile web update dsh-timeline                        # 更新到最新
-dsh plugin --profile web remove dsh-timeline                        # 卸载（同时取消注册）
+dsh plugin --profile web add @kindred7/dsh-timeline@0.4.0           # 锁定 npm 版本
+dsh plugin --profile web update @kindred7/dsh-timeline              # 更新到最新
+dsh plugin --profile web remove @kindred7/dsh-timeline              # 卸载（同时取消注册）
 ```
 
 ### 方式二：在 profile 目录手动 pnpm 安装
@@ -47,10 +50,11 @@ dsh plugin --profile web remove dsh-timeline                        # 卸载（�
 # 1. 进入 dsh web profile 目录
 cd %USERPROFILE%\.dsh\profiles\web
 
-# 2. 从 GitHub 直接安装（任选其一）
-pnpm add github:kindred-7/dsh-timeline                # 最新 main 分支
+# 2. 安装（任选其一）
+pnpm add @kindred7/dsh-timeline                       # npm 注册表最新版
+pnpm add @kindred7/dsh-timeline@0.4.0                 # 锁定版本
+pnpm add github:kindred-7/dsh-timeline                # 或 GitHub 最新 main 分支
 pnpm add https://github.com/kindred-7/dsh-timeline/releases/download/v0.4.0/dsh-timeline-0.4.0.tgz
-pnpm add D:\downloads\dsh-timeline-0.4.0.tgz          # 或本地 tgz 文件
 
 # 3. 注册到 dsh.profile.bundles
 pnpm exec dsh-timeline-register
@@ -63,7 +67,7 @@ dsh web
 
 ```powershell
 pnpm exec dsh-timeline-register --remove
-pnpm remove dsh-timeline
+pnpm remove @kindred7/dsh-timeline
 ```
 
 > npm 用户同样适用：`npm install github:kindred-7/dsh-timeline`
@@ -95,7 +99,7 @@ cd dsh-timeline
 
 ```bash
 # Windows（把 <插件目录> 替换为解压后的实际路径）
-xcopy /E /I "<插件目录>" "%USERPROFILE%\.dsh\profiles\web\node_modules\dsh-timeline"
+xcopy /E /I "<插件目录>" "%USERPROFILE%\.dsh\profiles\web\node_modules\@kindred7\dsh-timeline"
 ```
 
 2. **编辑 web profile 配置**
@@ -105,14 +109,14 @@ xcopy /E /I "<插件目录>" "%USERPROFILE%\.dsh\profiles\web\node_modules\dsh-t
 ```json
 {
   "dependencies": {
-    "dsh-timeline": "file:./node_modules/dsh-timeline"
+    "@kindred7/dsh-timeline": "file:./node_modules/@kindred7/dsh-timeline"
   },
   "dsh": {
     "profile": {
       "bundles": [
         "@deepseek-ai/dsh-base",
         "@deepseek-ai/dsh-web-app",
-        "dsh-timeline"
+        "@kindred7/dsh-timeline"
       ]
     }
   }
@@ -256,12 +260,12 @@ dsh-timeline/
 
 1. 检查插件是否正确安装：
 ```powershell
-Test-Path "$env:USERPROFILE\.dsh\profiles\web\node_modules\dsh-timeline"
+Test-Path "$env:USERPROFILE\.dsh\profiles\web\node_modules\@kindred7\dsh-timeline"
 ```
 
 2. 检查 package.json 是否包含插件：
 ```powershell
-Get-Content "$env:USERPROFILE\.dsh\profiles\web\package.json" | Select-String "dsh-timeline"
+Get-Content "$env:USERPROFILE\.dsh\profiles\web\package.json" | Select-String "kindred7"
 ```
 
 3. 重启 DSH web 应用
@@ -331,6 +335,7 @@ cd dsh-timeline
 
 ### 0.4.0
 
+- **变更**：发布到 npm，包名 **@kindred7/dsh-timeline**（未加 scope 的 `dsh-timeline` 已被占用）；裸包名直装无需访问 GitHub，国内经 npmmirror 同步后可达
 - **修复**：长对话最底部点击刻度跳转失效
   - trajectory/多标签场景同一会话视图会挂载多份，全局 DOM 查询可能命中隐藏副本导致滚了看不见——现在只认可见行，并用 `row.closest('[data-conversation-scroll]')` 解析滚动容器（与宿主同款语义）
   - 宿主的贴底跟随（ResizeObserver 回顶）会在动画头几帧把从底部启动的平滑滚动拽回——现在先瞬时预抬脱离贴底状态再平滑滚动

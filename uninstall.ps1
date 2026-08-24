@@ -1,4 +1,4 @@
-﻿# ============================================================================
+# ============================================================================
 # DSH Conversation Timeline 插件卸载脚本（便携版）
 #
 # 用法：
@@ -19,7 +19,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 # --- 常量 ---
-$pluginName = "dsh-timeline"
+$pluginName = "@kindred7/dsh-timeline"
 $targetDir  = Join-Path $ProfileDir "node_modules\$pluginName"
 $pkgPath    = Join-Path $ProfileDir "package.json"
 

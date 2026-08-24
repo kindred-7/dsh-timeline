@@ -151,7 +151,7 @@ C:\Users\kindr\.dsh\profiles\web\node_modules\dsh-timeline\lib\client.js
        "bundles": [
          "@deepseek-ai/dsh-base",
          "@deepseek-ai/dsh-web-app",
-         "dsh-timeline"
+         "@kindred7/dsh-timeline"
        ]
      }
    }
@@ -228,12 +228,12 @@ setTooltip({
    ```
 
 2. 删除以下内容：
-   - `dependencies` 中的 `"dsh-timeline"`
-   - `bundles` 数组中的 `"dsh-timeline"`
+   - `dependencies` 中的 `"@kindred7/dsh-timeline"`
+   - `bundles` 数组中的 `"@kindred7/dsh-timeline"`
 
 3. 删除插件目录：
    ```powershell
-   Remove-Item -Recurse -Force "$env:USERPROFILE\.dsh\profiles\web\node_modules\dsh-timeline"
+   Remove-Item -Recurse -Force "$env:USERPROFILE\.dsh\profiles\web\node_modules\@kindred7\dsh-timeline"
    ```
 
 4. 重启 DSH

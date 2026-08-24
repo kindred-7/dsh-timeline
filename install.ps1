@@ -1,4 +1,4 @@
-﻿# ============================================================================
+# ============================================================================
 # DSH Conversation Timeline 插件安装脚本（便携版）
 #
 # 用法：把整个插件文件夹拷贝到目标电脑任意位置，然后：
@@ -24,7 +24,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 # --- 常量 ---
-$pluginName   = "dsh-timeline"
+$pluginName   = "@kindred7/dsh-timeline"
 $pluginSource = $PSScriptRoot                       # 以脚本所在目录为源，天然便携
 $targetDir    = Join-Path $ProfileDir "node_modules\$pluginName"
 $pkgPath      = Join-Path $ProfileDir "package.json"

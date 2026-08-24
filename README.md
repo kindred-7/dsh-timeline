@@ -24,19 +24,22 @@ A DeepSeek Harness (DSH) client plugin that renders a vertical timeline on the l
 `dsh plugin --profile web <args>` runs pnpm inside the web profile directory (`%USERPROFILE%\.dsh\profiles\web`, created on first use) and, after every successful install/update/remove, reconciles `dsh.profile.bundles`: any dependency whose package declares `dsh.bundle` is registered automatically — no manual register step.
 
 ```powershell
-# install from GitHub into the web profile
+# from the npm registry — also reachable in China without a proxy (auto-synced by npmmirror)
+dsh plugin --profile web add @kindred7/dsh-timeline
+
+# or straight from GitHub
 dsh plugin --profile web add github:kindred-7/dsh-timeline
 
 # restart DSH web to load it
 dsh web
 ```
 
-Pin a tag or manage the plugin with the same command:
+Pin a version or manage the plugin with the same command:
 
 ```powershell
-dsh plugin --profile web add github:kindred-7/dsh-timeline#v0.4.0   # pin a tag
-dsh plugin --profile web update dsh-timeline                        # update to latest
-dsh plugin --profile web remove dsh-timeline                        # uninstall (also unregisters)
+dsh plugin --profile web add @kindred7/dsh-timeline@0.4.0           # pin an npm version
+dsh plugin --profile web update @kindred7/dsh-timeline              # update to latest
+dsh plugin --profile web remove @kindred7/dsh-timeline              # uninstall (also unregisters)
 ```
 
 ### Method B: drive pnpm in the profile directory yourself
@@ -47,13 +50,11 @@ On the target machine (Node.js ≥ 18 and pnpm required):
 # 1. Enter the dsh web profile directory
 cd %USERPROFILE%\.dsh\profiles\web
 
-# 2. Install from GitHub (pick one)
-pnpm add github:kindred-7/dsh-timeline                  # latest main branch
-pnpm add github:kindred-7/dsh-timeline#v0.4.0           # pin a tag
+# 2. Install (pick one)
+pnpm add @kindred7/dsh-timeline                         # latest from the npm registry
+pnpm add @kindred7/dsh-timeline@0.4.0                   # pin a version
+pnpm add github:kindred-7/dsh-timeline                  # or latest main branch from GitHub
 pnpm add https://github.com/kindred-7/dsh-timeline/releases/download/v0.4.0/dsh-timeline-0.4.0.tgz   # release tarball
-
-# npm works equally well:
-npm install github:kindred-7/dsh-timeline
 
 # 3. Register into dsh.profile.bundles
 pnpm exec dsh-timeline-register
@@ -66,7 +67,7 @@ Uninstall:
 
 ```powershell
 pnpm exec dsh-timeline-register --remove   # remove the bundle entry
-pnpm remove dsh-timeline                   # remove the dependency
+pnpm remove @kindred7/dsh-timeline         # remove the dependency
 ```
 
 ### Method C: one-click script (no Node/pnpm needed)
@@ -90,7 +91,7 @@ Uninstall: `.\uninstall.ps1`
 1. Copy the plugin folder:
 
 ```bash
-xcopy /E /I "<plugin-folder>" "%USERPROFILE%\.dsh\profiles\web\node_modules\dsh-timeline"
+xcopy /E /I "<plugin-folder>" "%USERPROFILE%\.dsh\profiles\web\node_modules\@kindred7\dsh-timeline"
 ```
 
 2. Open `%USERPROFILE%\.dsh\profiles\web\package.json` and wire it up:
@@ -98,14 +99,14 @@ xcopy /E /I "<plugin-folder>" "%USERPROFILE%\.dsh\profiles\web\node_modules\dsh-
 ```json
 {
   "dependencies": {
-    "dsh-timeline": "file:./node_modules/dsh-timeline"
+    "@kindred7/dsh-timeline": "file:./node_modules/@kindred7/dsh-timeline"
   },
   "dsh": {
     "profile": {
       "bundles": [
         "@deepseek-ai/dsh-base",
         "@deepseek-ai/dsh-web-app",
-        "dsh-timeline"
+        "@kindred7/dsh-timeline"
       ]
     }
   }
@@ -179,6 +180,7 @@ Override the CSS classes to customize:
 
 ### 0.4.0
 
+- **Changed** — published to npm as **@kindred7/dsh-timeline** (the unscoped `dsh-timeline` name was already taken); a bare registry specifier now installs without touching GitHub, and npmmirror keeps it reachable in China
 - **Fixed** — tick navigation failing at the bottom of long conversations:
   - hidden duplicate conversation views (trajectory/tabs) hijacked the global DOM query; the plugin now targets the first *visible* row and resolves the scroller via `row.closest('[data-conversation-scroll]')` (same semantics as the host)
   - the host's pinned-to-bottom follow (ResizeObserver snap) cancelled smooth scrolls started at the bottom; navigation now releases the pin with an instant pre-nudge before gliding
