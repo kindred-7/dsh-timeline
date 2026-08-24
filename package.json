@@ -5,7 +5,7 @@
   "type": "module",
   "main": "lib/index.js",
   "bin": {
-    "dsh-timeline-register": "./register.js"
+    "dsh-timeline-register": "register.js"
   },
   "files": [
     "lib",
