@@ -34,7 +34,7 @@ dsh web
 锁定版本与日常管理使用同一条命令：
 
 ```powershell
-dsh plugin --profile web add github:kindred-7/dsh-timeline#v0.3.0   # 锁定 v0.3.0 tag
+dsh plugin --profile web add github:kindred-7/dsh-timeline#v0.4.0   # 锁定 v0.4.0 tag
 dsh plugin --profile web update dsh-timeline                        # 更新到最新
 dsh plugin --profile web remove dsh-timeline                        # 卸载（同时取消注册）
 ```
@@ -49,8 +49,8 @@ cd %USERPROFILE%\.dsh\profiles\web
 
 # 2. 从 GitHub 直接安装（任选其一）
 pnpm add github:kindred-7/dsh-timeline                # 最新 main 分支
-pnpm add https://github.com/kindred-7/dsh-timeline/releases/download/v0.3.0/dsh-timeline-0.3.0.tgz
-pnpm add D:\downloads\dsh-timeline-0.3.0.tgz          # 或本地 tgz 文件
+pnpm add https://github.com/kindred-7/dsh-timeline/releases/download/v0.4.0/dsh-timeline-0.4.0.tgz
+pnpm add D:\downloads\dsh-timeline-0.4.0.tgz          # 或本地 tgz 文件
 
 # 3. 注册到 dsh.profile.bundles
 pnpm exec dsh-timeline-register
@@ -141,7 +141,8 @@ dsh web
 
 ### 快速定位
 - 点击任意标记
-- 对话窗口会平滑滚动到对应的提问位置
+- 对话窗口会平滑滚动到对应的提问位置；即使已贴在对话最底部、或 AI 正在流式回复，点击跳转依然可靠
+- 若目标提问已在物理滚动极限（如最新一条提问、且你正停在最底部），该行会短暂闪烁高亮提示"已在此处"——内容不足一屏时无法再滚动
 - 支持键盘导航（Tab 键切换标记）
 
 ## 技术实现
@@ -325,6 +326,20 @@ cd dsh-timeline
 2. 添加必要的注释
 3. 测试后再提交
 4. 更新相关文档
+
+## 更新记录
+
+### 0.4.0
+
+- **修复**：长对话最底部点击刻度跳转失效
+  - trajectory/多标签场景同一会话视图会挂载多份，全局 DOM 查询可能命中隐藏副本导致滚了看不见——现在只认可见行，并用 `row.closest('[data-conversation-scroll]')` 解析滚动容器（与宿主同款语义）
+  - 宿主的贴底跟随（ResizeObserver 回顶）会在动画头几帧把从底部启动的平滑滚动拽回——现在先瞬时预抬脱离贴底状态再平滑滚动
+- **新增**：目标行已在物理滚动极限时，闪烁高亮代替无效滚动，给出明确的定位反馈
+- **修复**：多视图挂载下当前阅读位置高亮可能跟随隐藏副本
+
+### 0.3.0
+
+- 首个公开发布版本
 
 ## 许可证
 

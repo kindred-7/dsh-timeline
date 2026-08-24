@@ -34,7 +34,7 @@ dsh web
 Pin a tag or manage the plugin with the same command:
 
 ```powershell
-dsh plugin --profile web add github:kindred-7/dsh-timeline#v0.3.0   # pin a tag
+dsh plugin --profile web add github:kindred-7/dsh-timeline#v0.4.0   # pin a tag
 dsh plugin --profile web update dsh-timeline                        # update to latest
 dsh plugin --profile web remove dsh-timeline                        # uninstall (also unregisters)
 ```
@@ -49,8 +49,8 @@ cd %USERPROFILE%\.dsh\profiles\web
 
 # 2. Install from GitHub (pick one)
 pnpm add github:kindred-7/dsh-timeline                  # latest main branch
-pnpm add github:kindred-7/dsh-timeline#v0.3.0           # pin a tag
-pnpm add https://github.com/kindred-7/dsh-timeline/releases/download/v0.3.0/dsh-timeline-0.3.0.tgz   # release tarball
+pnpm add github:kindred-7/dsh-timeline#v0.4.0           # pin a tag
+pnpm add https://github.com/kindred-7/dsh-timeline/releases/download/v0.4.0/dsh-timeline-0.4.0.tgz   # release tarball
 
 # npm works equally well:
 npm install github:kindred-7/dsh-timeline
@@ -130,7 +130,7 @@ Once installed, the timeline renders automatically:
 
 - **View** — each user question shows a gray tick on the left (6px spacing, vertically centered)
 - **Preview** — hover extends a tick (12px → 24px), tints it blue with glow, and shows a tooltip of the question
-- **Navigate** — click a tick to smooth-scroll to that message; keyboard navigation supported via Tab
+- **Navigate** — click a tick to smooth-scroll that question to the top of the view; works reliably even when pinned to the bottom or during streaming. If the target is already at the physical scroll limit (e.g. the newest question while you sit at the very bottom), the row flashes briefly instead — nothing can scroll further. Keyboard navigation supported via Tab
 
 ## Plugin structure
 
@@ -174,6 +174,20 @@ Override the CSS classes to customize:
 - Ticks are positioned relative to the conversation container; exotic layouts may need a `left` tweak
 - Tooltip placement is mouse-based and can clip at screen edges
 - Only user messages are shown (assistant/system messages have no ticks)
+
+## Changelog
+
+### 0.4.0
+
+- **Fixed** — tick navigation failing at the bottom of long conversations:
+  - hidden duplicate conversation views (trajectory/tabs) hijacked the global DOM query; the plugin now targets the first *visible* row and resolves the scroller via `row.closest('[data-conversation-scroll]')` (same semantics as the host)
+  - the host's pinned-to-bottom follow (ResizeObserver snap) cancelled smooth scrolls started at the bottom; navigation now releases the pin with an instant pre-nudge before gliding
+- **Added** — flash highlight on the target row when no scroll displacement is physically possible
+- **Fixed** — active-tick highlight could track a hidden view copy under multi-view mounting
+
+### 0.3.0
+
+- Initial public release
 
 ## License
 
