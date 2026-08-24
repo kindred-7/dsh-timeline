@@ -14,14 +14,34 @@ A DeepSeek Harness (DSH) client plugin that renders a vertical timeline on the l
 
 ## Requirements
 
-- Node.js ≥ 18 and pnpm (Method A) — or nothing at all (Method B)
+- DSH and pnpm on PATH (Methods A–B) — or nothing at all (Methods C & D)
 - DSH ≥ 0.1.1-rc.2 · React 18+ · Web platform only
 
 ## Installation
 
-### Method A: install straight from GitHub (recommended)
+### Method A: one command via the dsh CLI (recommended)
 
-On the target machine:
+`dsh plugin --profile web <args>` runs pnpm inside the web profile directory (`%USERPROFILE%\.dsh\profiles\web`, created on first use) and, after every successful install/update/remove, reconciles `dsh.profile.bundles`: any dependency whose package declares `dsh.bundle` is registered automatically — no manual register step.
+
+```powershell
+# install from GitHub into the web profile
+dsh plugin --profile web add github:kindred-7/dsh-timeline
+
+# restart DSH web to load it
+dsh web
+```
+
+Pin a tag or manage the plugin with the same command:
+
+```powershell
+dsh plugin --profile web add github:kindred-7/dsh-timeline#v0.3.0   # pin a tag
+dsh plugin --profile web update dsh-timeline                        # update to latest
+dsh plugin --profile web remove dsh-timeline                        # uninstall (also unregisters)
+```
+
+### Method B: drive pnpm in the profile directory yourself
+
+On the target machine (Node.js ≥ 18 and pnpm required):
 
 ```powershell
 # 1. Enter the dsh web profile directory
@@ -49,7 +69,7 @@ pnpm exec dsh-timeline-register --remove   # remove the bundle entry
 pnpm remove dsh-timeline                   # remove the dependency
 ```
 
-### Method B: one-click script (no Node/pnpm needed)
+### Method C: one-click script (no Node/pnpm needed)
 
 1. Download and unzip `dsh-timeline-<version>.zip` anywhere
 2. Run the installer from the plugin folder:
@@ -65,7 +85,7 @@ The script copies the plugin into `%USERPROFILE%\.dsh\profiles\web\node_modules\
 
 Uninstall: `.\uninstall.ps1`
 
-### Method C: manual
+### Method D: manual
 
 1. Copy the plugin folder:
 

@@ -19,9 +19,29 @@ dsh web 对话时间线插件：在对话界面左侧渲染一条极简的垂直
 
 ## 快速开始
 
-### 方式一：pnpm 安装（推荐）
+### 方式一：一条命令安装（推荐）
 
-在目标电脑上（需已安装 Node.js 和 pnpm）：
+`dsh plugin --profile web <参数>` 会进入 web profile 目录（`%USERPROFILE%\.dsh\profiles\web`，首次使用自动创建）并把参数转发给 pnpm；安装/更新/卸载成功后自动对账 `dsh.profile.bundles`——凡是声明了 `dsh.bundle` 的依赖都会被自动注册，无需手动执行注册命令。
+
+```powershell
+# 从 GitHub 安装到 web profile
+dsh plugin --profile web add github:kindred-7/dsh-timeline
+
+# 重启 DSH web 生效
+dsh web
+```
+
+锁定版本与日常管理使用同一条命令：
+
+```powershell
+dsh plugin --profile web add github:kindred-7/dsh-timeline#v0.3.0   # 锁定 v0.3.0 tag
+dsh plugin --profile web update dsh-timeline                        # 更新到最新
+dsh plugin --profile web remove dsh-timeline                        # 卸载（同时取消注册）
+```
+
+### 方式二：在 profile 目录手动 pnpm 安装
+
+在目标电脑上（需已安装 Node.js ≥ 18 和 pnpm）：
 
 ```powershell
 # 1. 进入 dsh web profile 目录
@@ -29,11 +49,8 @@ cd %USERPROFILE%\.dsh\profiles\web
 
 # 2. 从 GitHub 直接安装（任选其一）
 pnpm add github:kindred-7/dsh-timeline                # 最新 main 分支
-pnpm add github:kindred-7/dsh-timeline#v0.3.0         # 锁定 v0.3.0 tag
-# 或安装指定版本的 tgz：
 pnpm add https://github.com/kindred-7/dsh-timeline/releases/download/v0.3.0/dsh-timeline-0.3.0.tgz
-# 或本地 tgz 文件：
-pnpm add D:\downloads\dsh-timeline-0.3.0.tgz
+pnpm add D:\downloads\dsh-timeline-0.3.0.tgz          # 或本地 tgz 文件
 
 # 3. 注册到 dsh.profile.bundles
 pnpm exec dsh-timeline-register
@@ -51,7 +68,7 @@ pnpm remove dsh-timeline
 
 > npm 用户同样适用：`npm install github:kindred-7/dsh-timeline`
 
-### 方式二：一键脚本安装（无需 Node/pnpm）
+### 方式三：一键脚本安装（无需 Node/pnpm）
 
 1. 将 `dsh-timeline-<版本>.zip` 解压到任意目录
 2. 在 PowerShell 中进入插件目录并运行安装脚本：
