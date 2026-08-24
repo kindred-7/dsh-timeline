@@ -182,6 +182,10 @@ Override the CSS classes to customize:
 
 ## Changelog
 
+### 0.4.1
+
+- **Changed** — tooltip restyled to match DSH native overlays (design tokens: dark plate `rgb(44,44,46)`, white text, 13px/20px, 10px radius) and clamped to 3 lines with ellipsis
+
 ### 0.4.0
 
 - **Changed** — published to npm as **@kindred7/dsh-timeline** (the unscoped `dsh-timeline` name was already taken); a bare registry specifier now installs without touching GitHub, and npmmirror keeps it reachable in China

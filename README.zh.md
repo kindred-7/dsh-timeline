@@ -337,6 +337,10 @@ cd dsh-timeline
 
 ## 更新记录
 
+### 0.4.1
+
+- **变更**：tooltip 视觉对齐 DSH 原生浮层（设计 token：深色板 `rgb(44,44,46)`、纯白文字、13px/20px、10px 圆角），最多显示 3 行后省略号截断
+
 ### 0.4.0
 
 - **变更**：发布到 npm，包名 **@kindred7/dsh-timeline**（未加 scope 的 `dsh-timeline` 已被占用）；裸包名直装无需访问 GitHub，国内经 npmmirror 同步后可达
