@@ -1,4 +1,6 @@
-# DSH Timeline（dsh-timeline）
+# DSH Timeline（@kindred7/dsh-timeline）
+
+[![npm version](https://img.shields.io/npm/v/@kindred7/dsh-timeline)](https://www.npmjs.com/package/@kindred7/dsh-timeline)
 
 dsh web 对话时间线插件：在对话界面左侧渲染一条极简的垂直刻度线，每一轮用户提问对应一个刻度，为长对话提供"全局地图"式的快速导航。
 
@@ -42,6 +44,8 @@ dsh plugin --profile web update @kindred7/dsh-timeline              # 更新到�
 dsh plugin --profile web remove @kindred7/dsh-timeline              # 卸载（同时取消注册）
 ```
 
+> npmmirror 镜像通常在发布后数分钟内自动同步；若刚发布的新版本在镜像上 404，稍等片刻重试，或临时在命令后追加 `--registry=https://registry.npmjs.org`。
+
 ### 方式二：在 profile 目录手动 pnpm 安装
 
 在目标电脑上（需已安装 Node.js ≥ 18 和 pnpm）：
@@ -54,7 +58,7 @@ cd %USERPROFILE%\.dsh\profiles\web
 pnpm add @kindred7/dsh-timeline                       # npm 注册表最新版
 pnpm add @kindred7/dsh-timeline@0.4.0                 # 锁定版本
 pnpm add github:kindred-7/dsh-timeline                # 或 GitHub 最新 main 分支
-pnpm add https://github.com/kindred-7/dsh-timeline/releases/download/v0.4.0/dsh-timeline-0.4.0.tgz
+pnpm add https://registry.npmjs.org/@kindred7/dsh-timeline/-/dsh-timeline-0.4.0.tgz
 
 # 3. 注册到 dsh.profile.bundles
 pnpm exec dsh-timeline-register

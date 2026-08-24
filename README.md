@@ -1,5 +1,7 @@
 # DSH Conversation Timeline Plugin
 
+[![npm version](https://img.shields.io/npm/v/@kindred7/dsh-timeline)](https://www.npmjs.com/package/@kindred7/dsh-timeline)
+
 A DeepSeek Harness (DSH) client plugin that renders a vertical timeline on the left side of the conversation window — one tick per user question — giving long conversations a "global map" for quick navigation.
 
 ## Features
@@ -42,6 +44,8 @@ dsh plugin --profile web update @kindred7/dsh-timeline              # update to 
 dsh plugin --profile web remove @kindred7/dsh-timeline              # uninstall (also unregisters)
 ```
 
+> npmmirror syncs new publishes within minutes; if a brand-new version 404s on the mirror, retry shortly or append `--registry=https://registry.npmjs.org` to the command once.
+
 ### Method B: drive pnpm in the profile directory yourself
 
 On the target machine (Node.js ≥ 18 and pnpm required):
@@ -54,7 +58,7 @@ cd %USERPROFILE%\.dsh\profiles\web
 pnpm add @kindred7/dsh-timeline                         # latest from the npm registry
 pnpm add @kindred7/dsh-timeline@0.4.0                   # pin a version
 pnpm add github:kindred-7/dsh-timeline                  # or latest main branch from GitHub
-pnpm add https://github.com/kindred-7/dsh-timeline/releases/download/v0.4.0/dsh-timeline-0.4.0.tgz   # release tarball
+pnpm add https://registry.npmjs.org/@kindred7/dsh-timeline/-/dsh-timeline-0.4.0.tgz   # registry tarball
 
 # 3. Register into dsh.profile.bundles
 pnpm exec dsh-timeline-register
