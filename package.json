@@ -12,7 +12,7 @@
     "cordis.patch.yml",
     "register.js",
     "README.md",
-    "README.zh.md"
+    "README.en.md"
   ],
   "exports": {
     ".": "./lib/index.js",

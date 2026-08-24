@@ -1,104 +1,116 @@
-# DSH Conversation Timeline Plugin
+# DSH Timeline（@kindred7/dsh-timeline）
+
+[English](./README.en.md)
 
 [![npm version](https://img.shields.io/npm/v/@kindred7/dsh-timeline)](https://www.npmjs.com/package/@kindred7/dsh-timeline)
 
-A DeepSeek Harness (DSH) client plugin that renders a vertical timeline on the left side of the conversation window — one tick per user question — giving long conversations a "global map" for quick navigation.
+dsh web 对话时间线插件：在对话界面左侧渲染一条极简的垂直刻度线，每一轮用户提问对应一个刻度，为长对话提供"全局地图"式的快速导航。
 
-## Features
+## 功能描述
 
-- 📍 **Timeline markers** — every user question gets a short tick on the left of the conversation area
-- ✨ **Hover effect** — ticks smoothly extend and highlight in blue with a soft glow; neighboring ticks ripple outward
-- 💬 **Tooltip preview** — hovering shows a frosted-glass tooltip with the full question text
-- 🎯 **Click to navigate** — click any tick to smooth-scroll to that message
-- 📌 **Adaptive positioning** — follows sidebar resize / window zoom / layout collapse in real time, with a three-level container-detection fallback (no reliance on hashed class names)
-- 🌗 **Light & dark themes** — adapts automatically via `prefers-color-scheme`
-- ♿ **Accessible** — honors `prefers-reduced-motion`; ticks carry `aria-label`
+**一句话简介**（可直接用作 GitHub About / 仓库描述）：
 
-## Requirements
+> @kindred7/dsh-timeline —— dsh web 对话导航时间线：左侧刻度标记每轮提问，悬停预览、点击定位、滚动跟随。
 
-- DSH and pnpm on PATH (Methods A–B) — or nothing at all (Methods C & D)
-- DSH ≥ 0.1.1-rc.2 · React 18+ · Web platform only
+**详细功能：**
 
-## Installation
+- 🧭 **对话快速导航**：每条用户提问在对话区左侧对应一条短刻度线；点击任意刻度，平滑滚动定位到对应消息；滚动浏览时自动高亮当前阅读位置所在的刻度
+- 💬 **悬停预览**：鼠标悬停时刻度拉长并弹出毛玻璃 tooltip，显示该轮提问的完整内容
+- ✨ **波纹动效**：悬停某刻度时，上下相邻刻度呈阶梯式长度衰减（波纹扩散），过渡动画细腻克制
+- 📌 **自适应定位**：以对话容器为基准动态计算位置——侧边栏拉伸、窗口缩放、布局折叠时实时跟随，永不被遮挡；容器探测采用三级降级策略（消息行结构探测 → 语义标记 → 类名匹配），不依赖构建产物 hash 类名，跨版本、跨机器稳定可用
+- 🌗 **明暗主题**：通过 CSS 变量适配 `prefers-color-scheme`，深浅色模式均自动切换
+- ♿ **无障碍**：遵循 `prefers-reduced-motion` 关闭动效；刻度带 `aria-label` 支持读屏
 
-### Method A: one command via the dsh CLI (recommended)
+## 快速开始
 
-`dsh plugin --profile web <args>` runs pnpm inside the web profile directory (`%USERPROFILE%\.dsh\profiles\web`, created on first use) and, after every successful install/update/remove, reconciles `dsh.profile.bundles`: any dependency whose package declares `dsh.bundle` is registered automatically — no manual register step.
+### 方式一：一条命令安装（推荐）
+
+`dsh plugin --profile web <参数>` 会进入 web profile 目录（`%USERPROFILE%\.dsh\profiles\web`，首次使用自动创建）并把参数转发给 pnpm；安装/更新/卸载成功后自动对账 `dsh.profile.bundles`——凡是声明了 `dsh.bundle` 的依赖都会被自动注册，无需手动执行注册命令。
 
 ```powershell
-# from the npm registry — also reachable in China without a proxy (auto-synced by npmmirror)
+# 从 npm 注册表安装——国内无需代理即可访问（npmmirror 自动同步）
 dsh plugin --profile web add @kindred7/dsh-timeline
 
-# or straight from GitHub
+# 或从 GitHub 直装
 dsh plugin --profile web add github:kindred-7/dsh-timeline
 
-# restart DSH web to load it
+# 重启 DSH web 生效
 dsh web
 ```
 
-Pin a version or manage the plugin with the same command:
+锁定版本与日常管理使用同一条命令：
 
 ```powershell
-dsh plugin --profile web add @kindred7/dsh-timeline@0.4.0           # pin an npm version
-dsh plugin --profile web update @kindred7/dsh-timeline              # update to latest
-dsh plugin --profile web remove @kindred7/dsh-timeline              # uninstall (also unregisters)
+dsh plugin --profile web add @kindred7/dsh-timeline@0.4.0           # 锁定 npm 版本
+dsh plugin --profile web update @kindred7/dsh-timeline              # 更新到最新
+dsh plugin --profile web remove @kindred7/dsh-timeline              # 卸载（同时取消注册）
 ```
 
-> npmmirror syncs new publishes within minutes; if a brand-new version 404s on the mirror, retry shortly or append `--registry=https://registry.npmjs.org` to the command once.
+> npmmirror 镜像通常在发布后数分钟内自动同步；若刚发布的新版本在镜像上 404，稍等片刻重试，或临时在命令后追加 `--registry=https://registry.npmjs.org`。
 
-### Method B: drive pnpm in the profile directory yourself
+### 方式二：在 profile 目录手动 pnpm 安装
 
-On the target machine (Node.js ≥ 18 and pnpm required):
+在目标电脑上（需已安装 Node.js ≥ 18 和 pnpm）：
 
 ```powershell
-# 1. Enter the dsh web profile directory
+# 1. 进入 dsh web profile 目录
 cd %USERPROFILE%\.dsh\profiles\web
 
-# 2. Install (pick one)
-pnpm add @kindred7/dsh-timeline                         # latest from the npm registry
-pnpm add @kindred7/dsh-timeline@0.4.0                   # pin a version
-pnpm add github:kindred-7/dsh-timeline                  # or latest main branch from GitHub
-pnpm add https://registry.npmjs.org/@kindred7/dsh-timeline/-/dsh-timeline-0.4.0.tgz   # registry tarball
+# 2. 安装（任选其一）
+pnpm add @kindred7/dsh-timeline                       # npm 注册表最新版
+pnpm add @kindred7/dsh-timeline@0.4.0                 # 锁定版本
+pnpm add github:kindred-7/dsh-timeline                # 或 GitHub 最新 main 分支
+pnpm add https://registry.npmjs.org/@kindred7/dsh-timeline/-/dsh-timeline-0.4.0.tgz
 
-# 3. Register into dsh.profile.bundles
+# 3. 注册到 dsh.profile.bundles
 pnpm exec dsh-timeline-register
 
-# 4. Restart DSH web
+# 4. 重启
 dsh web
 ```
 
-Uninstall:
+卸载：
 
 ```powershell
-pnpm exec dsh-timeline-register --remove   # remove the bundle entry
-pnpm remove @kindred7/dsh-timeline         # remove the dependency
+pnpm exec dsh-timeline-register --remove
+pnpm remove @kindred7/dsh-timeline
 ```
 
-### Method C: one-click script (no Node/pnpm needed)
+> npm 用户同样适用：`npm install github:kindred-7/dsh-timeline`
 
-1. Download and unzip `dsh-timeline-<version>.zip` anywhere
-2. Run the installer from the plugin folder:
+### 方式三：一键脚本安装（无需 Node/pnpm）
+
+1. 将 `dsh-timeline-<版本>.zip` 解压到任意目录
+2. 在 PowerShell 中进入插件目录并运行安装脚本：
 
 ```powershell
 cd dsh-timeline
 .\install.ps1
-# if execution policy blocks it:
-# powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
-The script copies the plugin into `%USERPROFILE%\.dsh\profiles\web\node_modules\`, writes the dependency entry, and registers the bundle. It is idempotent — safe to re-run for updates.
+> 如遇执行策略限制，使用：
+> `powershell -ExecutionPolicy Bypass -File .\install.ps1`
 
-Uninstall: `.\uninstall.ps1`
+脚本会自动完成：复制文件到 `%USERPROFILE%\.dsh\profiles\web\node_modules\`、写入依赖声明、注册到 `dsh.profile.bundles`。支持重复运行（幂等覆盖更新）。
 
-### Method D: manual
+卸载：
 
-1. Copy the plugin folder:
+```powershell
+.\uninstall.ps1
+```
+
+### 手动安装
+
+1. **复制插件文件**
 
 ```bash
-xcopy /E /I "<plugin-folder>" "%USERPROFILE%\.dsh\profiles\web\node_modules\@kindred7\dsh-timeline"
+# Windows（把 <插件目录> 替换为解压后的实际路径）
+xcopy /E /I "<插件目录>" "%USERPROFILE%\.dsh\profiles\web\node_modules\@kindred7\dsh-timeline"
 ```
 
-2. Open `%USERPROFILE%\.dsh\profiles\web\package.json` and wire it up:
+2. **编辑 web profile 配置**
+
+打开 `%USERPROFILE%\.dsh\profiles\web\package.json`，添加：
 
 ```json
 {
@@ -117,92 +129,238 @@ xcopy /E /I "<plugin-folder>" "%USERPROFILE%\.dsh\profiles\web\node_modules\@kin
 }
 ```
 
-3. Restart DSH web (`dsh web`)
+3. **重启 DSH**
 
-### Local development
-
-After changing code, refresh the snapshot inside the profile, then reload the page (Ctrl+F5):
-
-```powershell
-cd %USERPROFILE%\.dsh\profiles\web
-pnpm add D:\path\to\dsh-timeline
-pnpm exec dsh-timeline-register      # only needed the first time
+```bash
+dsh web
 ```
 
-## Usage
+## 使用说明
 
-Once installed, the timeline renders automatically:
+安装后，插件会自动在对话窗口左侧显示时间线标记：
 
-- **View** — each user question shows a gray tick on the left (6px spacing, vertically centered)
-- **Preview** — hover extends a tick (12px → 24px), tints it blue with glow, and shows a tooltip of the question
-- **Navigate** — click a tick to smooth-scroll that question to the top of the view; works reliably even when pinned to the bottom or during streaming. If the target is already at the physical scroll limit (e.g. the newest question while you sit at the very bottom), the row flashes briefly instead — nothing can scroll further. Keyboard navigation supported via Tab
+### 查看时间线
+- 每个用户提问会在左侧显示一个灰色短线标记
+- 标记垂直居中排列，间距 6px
 
-## Plugin structure
+### 预览问题
+- 将鼠标悬停在标记上
+- 短线会从 12px 平滑扩展到 24px
+- 颜色从灰色变为蓝色，并带有发光效果
+- 显示问题的 tooltip 预览
+
+### 快速定位
+- 点击任意标记
+- 对话窗口会平滑滚动到对应的提问位置；即使已贴在对话最底部、或 AI 正在流式回复，点击跳转依然可靠
+- 若目标提问已在物理滚动极限（如最新一条提问、且你正停在最底部），该行会短暂闪烁高亮提示"已在此处"——内容不足一屏时无法再滚动
+- 支持键盘导航（Tab 键切换标记）
+
+## 技术实现
+
+### 架构
+
+```
+┌─────────────────────────────────────┐
+│   DSH Web Application               │
+│  ┌──────────────────────────────┐  │
+│  │  Sidebar  │  Conversation    │  │
+│  │           │  ┌────────────┐  │  │
+│  │           │  │ Timeline   │  │  │
+│  │           │  │ Markers    │←─┼──┼─ Plugin
+│  │           │  └────────────┘  │  │
+│  │           │                  │  │
+│  └──────────────────────────────┘  │
+└─────────────────────────────────────┘
+```
+
+### 核心代码
+
+1. **监听会话消息**
+```javascript
+const session = useSession();
+const snapshot = session?.getSnapshot();
+const userMessages = snapshot.events
+  .filter(event => event.kind === 'user/message')
+  .map(event => ({
+    id: event.id,
+    content: event.content?.[0]?.text,
+    seq: event.seq
+  }));
+```
+
+2. **渲染时间线标记**
+```javascript
+<div className="timeline-container">
+  {userMessages.map((message, index) => (
+    <div
+      key={message.id}
+      className="timeline-marker"
+      onClick={() => scrollToMessage(message.seq)}
+      onMouseEnter={(e) => showTooltip(e, message)}
+      onMouseLeave={hideTooltip}
+    />
+  ))}
+</div>
+```
+
+3. **CSS 动效**
+```css
+.timeline-marker {
+  width: 12px;
+  height: 3px;
+  background-color: #6b7280;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timeline-marker:hover {
+  width: 24px;
+  background-color: #3b82f6;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+}
+```
+
+### 文件结构
 
 ```
 dsh-timeline/
-├── package.json          # manifest, peer deps, dsh bundle/client hints
-├── cordis.patch.yml      # bundle patch descriptor consumed by DSH
-├── register.js           # register/unregister CLI (bin: dsh-timeline-register)
-├── install.ps1           # Windows one-click installer
-├── uninstall.ps1         # uninstaller
+├── package.json          # 插件配置和依赖
+├── cordis.patch.yml      # bundle patch 描述文件（DSH 注入用）
+├── register.js           # 注册 CLI（bin: dsh-timeline-register）
+├── install.ps1           # Windows 一键安装脚本
+├── uninstall.ps1         # 卸载脚本
 ├── lib/
-│   ├── index.js          # plugin entry
-│   └── client.js         # client implementation (core)
-├── USAGE.md              # detailed usage guide (Chinese)
-├── README.md             # this file
-└── README.zh.md          # Chinese readme
+│   ├── index.js         # 插件入口
+│   └── client.js        # 客户端实现（核心）
+├── USAGE.md              # 使用指南
+├── README.md             # 中文说明（本文件）
+└── README.en.md          # English readme
 ```
 
-## How it works
+## 自定义样式
 
-- `lib/index.js` exposes the bundle patch (`cordis.patch.yml`) so the DSH client runtime injects the plugin UI into layout/conversation bundles
-- `lib/client.js` listens to the session via `useSession()`, extracts `user/message` events, renders ticks positioned against the conversation container, and handles hover ripple, tooltip, and click-scroll behavior
-
-## Styling
-
-Override the CSS classes to customize:
+插件使用 CSS 类名，可以通过覆盖样式来定制外观：
 
 ```css
-.timeline-marker { background-color: #10b981; }
-.timeline-marker:hover { background-color: #059669; box-shadow: 0 0 12px rgba(16, 185, 129, 0.6); }
-.timeline-container { left: 80px; }
+/* 在 web profile 的 cordis.patch.yml 中添加自定义样式 */
+
+/* 修改标记颜色 */
+.timeline-marker {
+  background-color: #10b981; /* 绿色 */
+}
+
+/* 修改 hover 效果 */
+.timeline-marker:hover {
+  background-color: #059669;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+}
+
+/* 修改时间线位置 */
+.timeline-container {
+  left: 80px; /* 调整距离左侧的距离 */
+}
 ```
 
-## Compatibility
+## 故障排除
 
-- DSH 0.1.1-rc.2+, React 18+, Web platform only
-- Windows 10/11 · Chrome / Edge / Firefox
+### 插件未显示
 
-## Known limitations
+1. 检查插件是否正确安装：
+```powershell
+Test-Path "$env:USERPROFILE\.dsh\profiles\web\node_modules\@kindred7\dsh-timeline"
+```
 
-- Ticks are positioned relative to the conversation container; exotic layouts may need a `left` tweak
-- Tooltip placement is mouse-based and can clip at screen edges
-- Only user messages are shown (assistant/system messages have no ticks)
+2. 检查 package.json 是否包含插件：
+```powershell
+Get-Content "$env:USERPROFILE\.dsh\profiles\web\package.json" | Select-String "kindred7"
+```
 
-## Changelog
+3. 重启 DSH web 应用
+
+### 时间线位置不正确
+
+如果时间线标记与侧边栏重叠，调整 `left` 值：
+
+```css
+.timeline-container {
+  left: 80px; /* 增加这个值 */
+}
+```
+
+### Tooltip 被裁剪
+
+如果 tooltip 在屏幕边缘被裁剪，可以修改 tooltip 位置逻辑：
+
+```javascript
+// 在 client.js 中修改 tooltip 位置计算
+const tooltipX = Math.min(rect.right + 10, window.innerWidth - 320);
+```
+
+## 开发
+
+### 本地开发
+
+1. 进入插件源码目录：
+```bash
+cd dsh-timeline
+```
+
+2. 修改代码后，重新安装到 profile：
+```powershell
+.\install.ps1
+```
+
+3. 刷新 DSH web 页面（Ctrl+F5）
+
+### 调试
+
+打开浏览器开发者工具（F12），查看：
+- Console：查看插件日志
+- Elements：检查 DOM 结构和样式
+- Network：确认插件文件加载
+
+## 兼容性
+
+- ✅ DSH 0.1.1-rc.2+
+- ✅ React 18+
+- ✅ Windows 10/11
+- ✅ Chrome/Edge/Firefox
+- ⚠️ 仅支持 Web 平台
+
+## 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+### 开发规范
+
+1. 遵循现有的代码风格
+2. 添加必要的注释
+3. 测试后再提交
+4. 更新相关文档
+
+## 更新记录
 
 ### 0.4.1
 
-- **Changed** — tooltip restyled to match DSH native overlays (design tokens: dark plate `rgb(44,44,46)`, white text, 13px/20px, 10px radius) and clamped to 3 lines with ellipsis
+- **变更**：tooltip 视觉对齐 DSH 原生浮层（设计 token：深色板 `rgb(44,44,46)`、纯白文字、13px/20px、10px 圆角），最多显示 3 行后省略号截断
 
 ### 0.4.0
 
-- **Changed** — published to npm as **@kindred7/dsh-timeline** (the unscoped `dsh-timeline` name was already taken); a bare registry specifier now installs without touching GitHub, and npmmirror keeps it reachable in China
-- **Fixed** — tick navigation failing at the bottom of long conversations:
-  - hidden duplicate conversation views (trajectory/tabs) hijacked the global DOM query; the plugin now targets the first *visible* row and resolves the scroller via `row.closest('[data-conversation-scroll]')` (same semantics as the host)
-  - the host's pinned-to-bottom follow (ResizeObserver snap) cancelled smooth scrolls started at the bottom; navigation now releases the pin with an instant pre-nudge before gliding
-- **Added** — flash highlight on the target row when no scroll displacement is physically possible
-- **Fixed** — active-tick highlight could track a hidden view copy under multi-view mounting
+- **变更**：发布到 npm，包名 **@kindred7/dsh-timeline**（未加 scope 的 `dsh-timeline` 已被占用）；裸包名直装无需访问 GitHub，国内经 npmmirror 同步后可达
+- **修复**：长对话最底部点击刻度跳转失效
+  - trajectory/多标签场景同一会话视图会挂载多份，全局 DOM 查询可能命中隐藏副本导致滚了看不见——现在只认可见行，并用 `row.closest('[data-conversation-scroll]')` 解析滚动容器（与宿主同款语义）
+  - 宿主的贴底跟随（ResizeObserver 回顶）会在动画头几帧把从底部启动的平滑滚动拽回——现在先瞬时预抬脱离贴底状态再平滑滚动
+- **新增**：目标行已在物理滚动极限时，闪烁高亮代替无效滚动，给出明确的定位反馈
+- **修复**：多视图挂载下当前阅读位置高亮可能跟随隐藏副本
 
 ### 0.3.0
 
-- Initial public release
+- 首个公开发布版本
 
-## License
+## 许可证
 
-MIT
+MIT License
 
-## Contributing
+## 致谢
 
-Issues and PRs welcome at <https://github.com/kindred-7/dsh-timeline>
+感谢 DeepSeek Harness 团队提供的优秀插件系统！
+
