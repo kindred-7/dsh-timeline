@@ -4,11 +4,12 @@
 
 [![npm version](https://img.shields.io/npm/v/@kindred7/dsh-timeline)](https://www.npmjs.com/package/@kindred7/dsh-timeline)
 
-A DeepSeek Harness (DSH) client plugin that renders a vertical timeline on the left side of the conversation window — one tick per user question — giving long conversations a "global map" for quick navigation.
+A DeepSeek Harness (DSH) client plugin that renders a vertical timeline on the left side of the conversation window — one tick per user question — giving long conversations a "global map" for quick navigation; it also ships terminal-style history recall: press ↑ on an empty composer to refill the previous question, and browse history like a shell.
 
 ## Features
 
 - 📍 **Timeline markers** — every user question gets a short tick on the left of the conversation area
+- ⌨️ **Terminal-style history recall** — with an empty composer, ↑ refills the most recent question; keep pressing ↑ to walk further back, ↓ to come forward, and any manual edit exits browse mode — no popup, no interruption
 - ✨ **Hover effect** — ticks smoothly extend and highlight in blue with a soft glow; neighboring ticks ripple outward
 - 💬 **Tooltip preview** — hovering shows a frosted-glass tooltip with the full question text
 - 🎯 **Click to navigate** — click any tick to smooth-scroll to that message
@@ -139,6 +140,21 @@ Once installed, the timeline renders automatically:
 - **Preview** — hover extends a tick (12px → 24px), tints it blue with glow, and shows a tooltip of the question
 - **Navigate** — click a tick to smooth-scroll that question to the top of the view; works reliably even when pinned to the bottom or during streaming. If the target is already at the physical scroll limit (e.g. the newest question while you sit at the very bottom), the row flashes briefly instead — nothing can scroll further. Keyboard navigation supported via Tab
 
+### History recall
+
+With an empty composer, press ↑ to recall past questions like a terminal:
+
+| Key | Behavior |
+|---|---|
+| ↑ (composer empty) | fills the most recent question straight into the input box (no popup) |
+| ↑ (repeated) | walks further back through history |
+| ↓ | comes forward again; past the newest entry restores the empty composer |
+| any manual edit | exits browse mode; ↑ reverts to "empty composer only" |
+
+- History is kept in browser localStorage: capped at 100 entries, deduplicated by text, newest first
+- Every question submitted in this browser is captured automatically across all sessions (steering messages included)
+- Only fires without modifier keys and outside IME composition; never interferes with the `/` `@` menus
+
 ## Plugin structure
 
 ```
@@ -183,6 +199,11 @@ Override the CSS classes to customize:
 - Only user messages are shown (assistant/system messages have no ticks)
 
 ## Changelog
+
+### 0.5.0
+
+- **Added** — terminal-style history recall: ↑ on an empty composer refills the most recent question; ↑/↓ browse history; a manual edit exits browse mode (see Usage → History recall)
+- **Added** — automatic capture of submitted questions across sessions (steering messages included), stored in localStorage (cap 100, text-deduplicated, newest first)
 
 ### 0.4.1
 
