@@ -1,7 +1,7 @@
 {
   "name": "@kindred7/dsh-timeline",
   "description": "Conversation timeline plugin (left-side markers with hover tooltip and click-to-scroll) plus terminal-style history recall: ArrowUp on an empty composer fills the previous question directly into the input box",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "type": "module",
   "main": "lib/index.js",
   "bin": {
