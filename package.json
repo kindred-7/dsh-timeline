@@ -1,7 +1,7 @@
 {
   "name": "@kindred7/dsh-timeline",
-  "description": "Conversation timeline plugin: shows short lines on the left side of the conversation, with hover animation, tooltip showing the question, and click-to-scroll navigation",
-  "version": "0.4.4",
+  "description": "Conversation timeline plugin (left-side markers with hover tooltip and click-to-scroll) plus terminal-style history recall: ArrowUp on an empty composer fills the previous question directly into the input box",
+  "version": "0.5.0",
   "type": "module",
   "main": "lib/index.js",
   "bin": {
@@ -82,6 +82,9 @@
     "deepseek-harness",
     "plugin",
     "timeline",
-    "conversation"
+    "conversation",
+    "history",
+    "recall",
+    "arrow-up"
   ]
 }
